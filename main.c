@@ -117,8 +117,8 @@ int check_teclado(int *ms) {
                 delay(1);
                 leer_tecla(&buf[1]);
                 
-                if (buf[1] == 'A') *ms -= 200; 
-                if (buf[1] == 'B') *ms += 200; 
+                if (buf[1] == 'A') *ms -= 20; 
+                if (buf[1] == 'B') *ms += 20; 
                 if (*ms < 10) *ms = 10;
                 if (*ms > 2000) *ms = 2000;
                 
@@ -186,7 +186,7 @@ void ajusteVelocidadADC(int *velocidad) {
         *velocidad = calculoLectura(analogRead(A0));
         printf("Velocidad actual: %3d ms \r", *velocidad);
         fflush(stdout);
-        
+        enviar_velocidad(*velocidad);
         leer_tecla(&c);
         delay(50); 
     }
