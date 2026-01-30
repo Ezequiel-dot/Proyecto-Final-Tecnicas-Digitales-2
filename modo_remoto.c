@@ -162,8 +162,6 @@ void mostrarSecuencia(const char* nombre) {
 int main(void) {
     char rx_buffer[RX_BUFFER_SIZE];
     char c;
-    char buffer[5];
-    int vel,n;
 
     int serial_fd = serial_open(SERIAL_PORT);
     if (serial_fd < 0)
@@ -217,8 +215,10 @@ int main(void) {
                 system("clear");   
                 menu_principal();          
             break;
-		
+            
+       
 	}
+	
 
 		/*n = read(serial_fd, buffer, sizeof(buffer) - 1);
 
