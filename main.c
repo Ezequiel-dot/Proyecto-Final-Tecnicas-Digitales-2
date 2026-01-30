@@ -124,6 +124,7 @@ int check_teclado(int *ms) {
                 
                 printf("\r Velocidad: %d ms   ", *ms);
                 fflush(stdout);
+                enviar_velocidad(*ms);
             }
         }
     }
@@ -240,12 +241,14 @@ int main() {
 
         while (!leer_tecla(&c)) delay(100); 
         
-        if (modo_remoto && (c >= '1' && c <= '8')) {
-             enviar_velocidad(velocidad);
-        }      
+        if (modo_remoto && (c >= '1' && c <= '8'))enviar_velocidad(velocidad);
+          
     
 
-        if (c == '0') break;
+        if (c == '0') {
+            system("clear");
+            break;
+        }
       switch (c) {
             case '1': 
                 mostrarSecuencia("AUTO FANTASTICO", &velocidad);
