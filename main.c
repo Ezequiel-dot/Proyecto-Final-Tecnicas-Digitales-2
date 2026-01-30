@@ -28,19 +28,14 @@ void secuenciaPropia2_Algoritmo(const int *leds, int *velocidad);
 void secuenciaPropia3_Tabla(const int *leds, int *velocidad);     
 void secuenciaPropia4_Tabla(const int *leds, int *velocidad);  
 extern int calculoLectura(int );//le paso analogRead(A0)
-
+void enviar_velocidad(int );
 
 //////////////////////enviar vel//////////////////////
 
-void enviar_velocidad(int *velocidad){
-     char buffer[5];
-    // int tem=*velocidad;
-     if(modo_remoto) {
-         snprintf(buffer, sizeof(buffer), "%d\n", *velocidad);
-         write(fd, buffer, strlen(buffer));
-         //printf("vel %d", atoi(buffer));
-         //printf("vel2 %d", tem);
-     }
+void enviar_velocidad(int vel){
+     if (modo_remoto) {
+        serialPrintf(fd, " %d\n", vel);
+    }
     
 }
 
@@ -243,7 +238,11 @@ int main() {
         printf("Opcion: ");
         fflush(stdout);
 
-        while (!leer_tecla(&c)) delay(100);       
+        while (!leer_tecla(&c)) delay(100); 
+        
+        if (modo_remoto && (c >= '1' && c <= '8')) {
+             enviar_velocidad(velocidad);
+        }      
     
 
         if (c == '0') break;
@@ -275,12 +274,10 @@ int main() {
             case '7': 
                 mostrarSecuencia("PROPIA 3 ", &velocidad);
                 secuenciaPropia3_Tabla(leds, &velocidad); 
-                enviar_velocidad(&velocidad);
                 break;
             case '8': 
                 mostrarSecuencia("PROPIA 4 ", &velocidad);
                 secuenciaPropia4_Tabla(leds, &velocidad); 
-                enviar_velocidad(&velocidad);
                 break;
             case 'V': 
                 ajusteVelocidadADC(&velocidad); 
@@ -288,7 +285,6 @@ int main() {
             case 'A':
                 modo_remoto = !modo_remoto;
                 modoRemoto(fd);
-                enviar_velocidad(&velocidad);
                 break;
          
         }

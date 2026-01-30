@@ -3,7 +3,6 @@
 #include <unistd.h>   
 
 int check_teclado(int *);
-void enviar_velocidad(int );
 
 void autoFantastico(const int *leds, int *vel) {
     int i;
