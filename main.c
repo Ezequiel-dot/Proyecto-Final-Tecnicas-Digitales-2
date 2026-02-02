@@ -34,7 +34,7 @@ void enviar_velocidad(int );
 
 void enviar_velocidad(int vel){
      if (modo_remoto) {
-        serialPrintf(fd, " %d\n", vel);
+        serialPrintf(fd, "%d\n", vel);
     }
     
 }
@@ -59,8 +59,7 @@ int serial_readline(int fd, char *buffer, size_t maxlen) {
 void modoRemoto(int fd){
     
     char rx_buffer[RX_BUFFER_SIZE];
-    system("clear");
-    printf("modo remoto inicializado");
+    
     char *msg="rem_mod_en";
         
         if(modo_remoto){
@@ -194,11 +193,13 @@ void ajusteVelocidadADC(int *velocidad) {
 
 ////////////////////mostrar secuenica en ejecucion////////////////////////////////
 void mostrarSecuencia(const char* nombre, int *velocidad) {
-   system("clear"); // Limpia la consola
+   if(modo_remoto==0){
+    system("clear"); // Limpia la consola
     printf(" EJECUTANDO: %s\n", nombre);
     printf(" Velocidad Inicial: %d ms\n", *velocidad); 
     printf(" Presione [S] para volver al menu.\n");
     printf(" Use [FLECHAS] para variar velocidad.\n");
+       }
 }
 /////////////////////////main/////////////////////////////////////////////////////
 int main() {
@@ -223,22 +224,24 @@ int main() {
 
     while (1) {
         for (int i = 0; i < num_leds; i++)digitalWrite(leds[i], LOW); 
-        system("clear");
-        printf("=== MENU (Vel: %d ms) ===\n", velocidad);
-        printf("1. Auto Fantastico\n");
-        printf("2. El Choque\n");
-        printf("3. La Apilada\n");
-        printf("4. La Carrera\n");
-        printf("5-8. Propias\n");
-        printf("V. Ajustar Velocidad Inicial\n");
-        printf("A. Cambiar modo:LOCAL/REMOTO\n");
-        printf("0. Salir\n");
-        printf("---------------------\n");
-        printf("[FLECHAS]: Velocidad\n");
-        printf("[S]  : Volver\n");
-        printf("Opcion: ");
-        fflush(stdout);
-
+        
+        if(modo_remoto == 0){
+            system("clear");
+            printf("=== MENU (Vel: %d ms) ===\n", velocidad);
+            printf("1. Auto Fantastico\n");
+            printf("2. El Choque\n");
+            printf("3. La Apilada\n");
+            printf("4. La Carrera\n");
+            printf("5-8. Propias\n");
+            printf("V. Ajustar Velocidad Inicial\n");
+            printf("A. Cambiar modo:LOCAL/REMOTO\n");
+            printf("0. Salir\n");
+            printf("---------------------\n");
+            printf("[FLECHAS]: Velocidad\n");
+            printf("[S]  : Volver\n");
+            printf("Opcion: ");
+            fflush(stdout);
+        }
         while (!leer_tecla(&c)) delay(100); 
         
         if (modo_remoto && (c >= '1' && c <= '8'))enviar_velocidad(velocidad);
@@ -287,7 +290,12 @@ int main() {
                 break;
             case 'A':
                 modo_remoto = !modo_remoto;
+                if(modo_remoto){
+                    system("clear");
+                    printf("Modo remoto activado\n");
+                    }
                 modoRemoto(fd);
+                
                 break;
          
         }
