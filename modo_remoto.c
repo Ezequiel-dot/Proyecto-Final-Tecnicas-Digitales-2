@@ -124,16 +124,19 @@ void password_menu(int fd) {
     char password[PASS_BUFFER_SIZE];
     char rx_buffer[RX_BUFFER_SIZE];
     
-	restaurarTerminal();
+	//restaurarTerminal();
+		 config0();   // activar modo RAW al salir para el menu principal
+
     while (1) {
         printf("\n=== INGRESO DE CONTRASEÑA ===\n");
         printf("Ingrese la contraseña: ");
-
-        if (fgets(password, sizeof(password), stdin) == NULL){
-			
-			continue;
-			
-			}
+		//	printf("contraseña %s",password);
+        for (int i = 0; i < 5; i++) {//lee los 5 caracteres
+            while(read(0, &password[i], 1) <= 0) usleep(10); //solo lee cuando se escribe algo
+            printf("*"); 
+            fflush(stdout);
+        }
+        password[5] = '\0'; 
             
 
         // eliminar salto de línea
@@ -154,7 +157,6 @@ void password_menu(int fd) {
         }
     }
 
-	 config0();   // activar modo RAW al salir para el menu principal
 
     // Menú siguiente (placeholder)
 }
