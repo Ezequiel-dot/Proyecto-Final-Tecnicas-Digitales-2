@@ -5,7 +5,6 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <errno.h>
-#include <sys/ioctl.h>
 #define SERIAL_PORT "/dev/ttyUSB0"
 #define BAUDRATE B9600
 
@@ -29,13 +28,6 @@ void restaurarTerminal() {
     tcsetattr(0, TCSANOW, &old);
 }
 
-// Detector de teclas (No bloqueante)
-int detectar_teclas() {
-    int bytes_esperando;
-    // Le preguntamos al sistema (FIONREAD) cuantos bytes hay en el teclado (0)
-    ioctl(0, FIONREAD, &bytes_esperando);
-    return bytes_esperando > 0;
-}
 
 // ----------------------------------------------------
 // Configuración del puerto serie
@@ -110,12 +102,10 @@ void serial_send(int fd, const char *msg) {
 
 ///////////////////////////////////////////
 int leer_tecla(char *c) {
-    if (detectar_teclas()) { // Solo leemos si hay algo presionado
-        if (read(0, c, 1) > 0) {
-            return 1; 
-        }
+   if (read(0, c, 1) > 0) {
+        return 1; 
     }
-    return 0; 
+    return 0;
 }
 // ----------------------------------------------------
 // Menú de autenticación
@@ -125,7 +115,7 @@ void password_menu(int fd) {
     char rx_buffer[RX_BUFFER_SIZE];
     
 	//restaurarTerminal();
-		 config0();   // activar modo RAW al salir para el menu principal
+    config0();   // activar modo RAW al salir para el menu principal
 
     while (1) {
         printf("\n=== INGRESO DE CONTRASEÑA ===\n");
