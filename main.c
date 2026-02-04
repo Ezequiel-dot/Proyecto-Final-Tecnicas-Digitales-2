@@ -34,7 +34,7 @@ void enviar_velocidad(int );
 
 void enviar_velocidad(int vel){
      if (modo_remoto) {
-        serialPrintf(fd, "%d\n", vel);
+        serialPrintf(fd, " %d\n", vel);
     }
     
 }
@@ -121,7 +121,7 @@ int check_teclado(int *ms) {
                 if (*ms < 10) *ms = 10;
                 if (*ms > 2000) *ms = 2000;
                 
-                printf("\r Velocidad: %d ms   ", *ms);
+                if(!modo_remoto)printf("\r Velocidad: %d ms   ", *ms);
                 fflush(stdout);
                 enviar_velocidad(*ms);
             }
@@ -177,14 +177,17 @@ void validarPassword() {
 ////////////////////////velocidad ajuste //////////////////////////////////////7 
 void ajusteVelocidadADC(int *velocidad) {
     char c = 0;
+    if(!modo_remoto){
     system("clear");
     printf("\n--- AJUSTE DE VELOCIDAD INICIAL ---\n");
     printf("Gire el potenciometro para ajustar. Presione S para aceptar.\n"); // 
-
+}
     while (c != 83) { 
         *velocidad = calculoLectura(analogRead(A0));
+        if(!modo_remoto){
         printf("Velocidad actual: %3d ms \r", *velocidad);
         fflush(stdout);
+    }
         enviar_velocidad(*velocidad);
         leer_tecla(&c);
         delay(50); 
