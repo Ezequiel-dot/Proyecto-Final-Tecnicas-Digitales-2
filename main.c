@@ -108,7 +108,7 @@ int check_teclado(int *ms) {
        if (leer_tecla(&c)) {  // devuelve 1 si hay tecla 
         if (c == 83) 
         {
-            return 1;//enter 
+            return 1;//S mayuscula 
         }
         if (c == 27) { // flecha
             char buf[2];
@@ -245,7 +245,8 @@ int main() {
             printf("Opcion: ");
             fflush(stdout);
         }
-        while (!leer_tecla(&c)) delay(100); 
+        
+        while(!leer_tecla(&c))delay(100);//mientras no halla tecla, espera 100ms
         
         if (modo_remoto && (c >= '1' && c <= '8'))enviar_velocidad(velocidad);
           
